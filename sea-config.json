@@ -1,0 +1,4 @@
+{
+  "main": "index.mjs",
+  "output": "sea-prep.blob"
+}
