@@ -1,4 +1,3 @@
-// import http from "http";
 const http = require('http')
 const https = require('https')
 const urlParser = require('url')
@@ -6,28 +5,10 @@ const fs = require('fs')
 const md5 = require('md5')
 const path = require('path')
 const pkg = require('pdf-to-printer')
-// import pkg from 'pdf-to-printer';
-// import https from "https";
-
-// import urlParser from "url";
-// import fs from 'fs';
-// import md5 from 'md5';
-// import path from 'path';
-
-console.log(process.platform)
-
 
 const host = 'localhost';
 const port = 8010;
 const {getPrinters: getPrintersNWin, print: printNWin, getDefaultPrinter: getDefaultPrinterNWin} = require('unix-print')
-// import {
-//     getPrinters as getPrintersNWin,
-//     print as printNWin,
-//     getDefaultPrinter as getDefaultPrinterNWin
-// } from "unix-print";
-
-// const {pkg} = require('pdf-to-printer')
-//
 
 
 const {getPrinters: getPrintersWin, print: printWin, getDefaultPrinter: getDefaultPrinterWin} = pkg;
@@ -46,9 +27,6 @@ if (process.platform === 'win32') {
     getDefaultPrinter = getDefaultPrinterNWin;
 }
 
-// getDefaultPrinter().then(console.log);
-
-// const __dirname = path.resolve(path.dirname(''));
 const requestListener = (req, res) => {
 
     res.setHeader("Content-Type", "application/json");
@@ -58,7 +36,7 @@ const requestListener = (req, res) => {
     let message = {"message": "not found"};
     let code = 200;
     let url = urlParser.parse(req.url, true);
-    console.log(url.pathname)
+    // console.log(url.pathname)
     switch (url.pathname) {
         case "/list":
             code = 0
@@ -74,7 +52,6 @@ const requestListener = (req, res) => {
 
             break
         case "/print":
-            console.log('request')
             const filename = md5(url.query.file) + ".pdf";
             const file = fs.createWriteStream(filename);
             try {
@@ -95,8 +72,7 @@ const requestListener = (req, res) => {
                         setTimeout(() => {
                             fs.unlinkSync(filename);
                         }, 10000)
-                        code = 200
-                        message = {"message": "print", "file": filename};
+
 
                     })
 
@@ -105,7 +81,8 @@ const requestListener = (req, res) => {
                 console.error(e);
             });
 
-
+            code = 200
+            message = {"message": "print", "file": filename};
             break
         default:
             code = 200
