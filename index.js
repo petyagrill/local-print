@@ -63,10 +63,13 @@ const requestListener = (req, res) => {
                 response.pipe(file);
                 file.on("finish", () => {
                     file.close();
-                    const options = {
+                    let options = {
                         printer: url.query.printer,
-                        paperSize: "4 x 6",
                     };
+                    if(typeof url.query.paperSize){
+                        options.paperSize =  url.query.paperSize
+                    }
+
                     print(filename, options).then((ress) => {
 
                         setTimeout(() => {
