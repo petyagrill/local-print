@@ -30,17 +30,21 @@ if (process.platform === 'win32') {
 const requestListener = (req, res) => {
 
     res.setHeader("Content-Type", "application/json");
-    res.setHeader('Access-Control-Allow-Origin', 'http://' + req.headers.host);
+    let scheme = 'https://';
+    if(req.headers.host === 'localhost:5173'){
+        scheme = 'http://';
+    }
+    res.setHeader('Access-Control-Allow-Origin', scheme + req.headers.host);
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,authorization');
-    let message = {"message": "not found"};
+    let message = {"success":false};
     let code = 200;
     let url = urlParser.parse(req.url, true);
     // console.log(url.pathname)
     switch (url.pathname) {
         case "/list":
             code = 0
-            message = {"message": "list"};
+            message = {"success":true};
             getPrinters().then((l) => {
                 message.list = l
                 getDefaultPrinter().then((def) => {
@@ -85,11 +89,11 @@ const requestListener = (req, res) => {
             });
 
             code = 200
-            message = {"message": "print", "file": filename};
+            message = {"success":true,"message": "Передано в друк", "file": filename};
             break
         default:
             code = 200
-            message = {"message": "ok"};
+            message = {"success":true};
             break
     }
     if (code > 0) {
