@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "node index.js",
-    "postinstall": "winser -i -s -c -a",
+    "postinstall": "winser -i -s -a",
     "preuninstall": "winser -r -x -s"
   },
   "dependencies": {

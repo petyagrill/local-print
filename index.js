@@ -30,11 +30,11 @@ if (process.platform === 'win32') {
 const requestListener = (req, res) => {
 
     res.setHeader("Content-Type", "application/json");
-    let scheme = 'https://';
+    let origin= 'https://pack.brushme.com';
     if(req.headers.host === 'localhost:5173'){
-        scheme = 'http://';
+        origin = 'http://localhost:5173';
     }
-    res.setHeader('Access-Control-Allow-Origin', scheme + req.headers.host);
+    res.setHeader('Access-Control-Allow-Origin', origin );
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,authorization');
     let message = {"success":false};
