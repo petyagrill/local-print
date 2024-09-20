@@ -46,9 +46,14 @@ const requestListener = (req, res) => {
             code = 0
             message = {"success":true};
             getPrinters().then((l) => {
-                message.list = l
+                message.list = [];
+                l.forEach((printer)=>{
+                     message.list.push(normalizePrinter(printer))
+                })
+
+
                 getDefaultPrinter().then((def) => {
-                    message.default = def
+                    message.default = normalizePrinter(def)
                     res.end(JSON.stringify(message));
                 });
 
@@ -103,6 +108,13 @@ const requestListener = (req, res) => {
 
 };
 
+const normalizePrinter = (printer)=>{
+
+    return {
+       "name":printer.deviceId??printer.printer,
+       "paperSizes":printer.paperSizes??[],
+    }
+}
 
 const server = http.createServer(requestListener);
 server.listen(port, host, () => {
